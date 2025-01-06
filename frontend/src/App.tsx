@@ -1,25 +1,38 @@
-import React from 'react';
-import logo from "./logo.svg";
+import React, {useEffect} from 'react';
+import {BrowserRouter as Router, Route, Routes, useLocation} from 'react-router-dom';
 import './App.css';
+import {LandingPage} from "./landing-page/LandingPage";
+import {Login} from "./login/Login";
+import {Register} from "./register/Register";
+import {Budget} from "./budget/Budget";
+import {Spending} from "./spending/Spending";
+
+
+const ScrollToTop = () => {
+    // Extracts pathname property(key) from an object
+    const { pathname } = useLocation();
+
+    // Automatically scrolls to top whenever pathname changes
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [pathname]);
+
+    return <></>
+}
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+      <Router>
+          <ScrollToTop />
+          <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+              <Route path="/budget" element={<Budget />} />
+              {/*<Route path="/savings" element={<Savings />} />*/}
+              <Route path="/spending" element={<Spending />} />
+          </Routes>
+      </Router>
   );
 }
 
