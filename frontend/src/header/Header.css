@@ -1,18 +1,3 @@
-.nav-links .login-button {
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    border: 1px solid #333;
-    background: #fff;
-    color: #333;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.nav-links .login-button:hover {
-    background: #333;
-    color: #fff;
-}
-
 /* Navbar */
 .navbar {
     display: flex;
@@ -28,10 +13,34 @@
     font-weight: bold;
 }
 
-.tabs{
+/* Navbar container for the buttons */
+.nav-links {
     display: flex;
-    flex-direction: row;
-    /*justify-content: center;*/
+    align-items: center;
+    margin-left: auto;  /* Moves the nav-links to the right */
+}
+
+.nav-links .login-button,
+.nav-links .register-button { /* Add .register-button styling */
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #333;
+    background: #fff;
+    color: #333;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 1rem;  /* Space between the buttons */
+}
+
+.nav-links .login-button:hover,
+.nav-links .register-button:hover {
+    background: #333;
+    color: #fff;
+}
+
+/* Tabs section (if needed) */
+.tabs {
+    display: flex;
     justify-content: space-between;
     width: 100%;
     margin-left: 25%;

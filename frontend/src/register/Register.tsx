@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './Register.css';
 import {Header} from "../header/Header";
-import {Footer} from "../footer/Footer"; // Importing CSS for RegisterPage
+import {Footer} from "../footer/Footer";
+import {useNavigate} from "react-router-dom"; // Importing CSS for RegisterPage
 
 export const Register: React.FC = () => {
     // State variables for all form fields
@@ -11,8 +12,10 @@ export const Register: React.FC = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
         // Check if any required fields are missing
@@ -27,10 +30,33 @@ export const Register: React.FC = () => {
             return;
         }
 
-        // If everything is valid, reset error and proceed (e.g., API call to register user)
+        try {
+            const response = await fetch('http://localhost:8080/auth/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    email,
+                    password,
+                    fullName: `${name} ${surname}`,
+                }),
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to create account');
+            }
+
+            const result = await response.json();
+        } catch (error) {
+            console.error('Error during signup:', error);
+        }
+
         setError('');
         alert('Account created successfully!');
-        // You can add an API call to save the user's data here.
+
+        navigate('/login');
     };
 
     return (
