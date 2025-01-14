@@ -5,7 +5,7 @@ import {useLocation, useNavigate} from "react-router-dom";
 import {Footer} from "../footer/Footer";
 
 export const Login: React.FC = () => {
-    const [username, setUsername] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
     const [password, setPassword] = useState<string>('');
     const [error, setError] = useState<string>('');
 
@@ -16,14 +16,52 @@ export const Login: React.FC = () => {
         setCurrentPage('/register');
         navigate('/register');
     };
-    const handleSubmit = (event: React.FormEvent) => {
+
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
-        if (username === '' || password === '') {
+        if (email === '' || password === '') {
             setError('Please fill in both fields');
         } else {
             setError('');
-            alert('Logged in successfully!');
+
+            if (email === '' || password === '') {
+                setError('Please fill in both fields');
+            } else {
+                setError('');
+
+                // Make the API call to log and receive the token
+                try {
+                    const response = await fetch('http://localhost:8080/auth/login', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            email: email,
+                            password: password,
+                        }),
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        const token = data.token;
+
+                        // Store token in localStorage
+                        localStorage.setItem('authToken', token);
+
+                        alert('Logged in successfully!');
+                        // Redirect user to dashboard (/) or protected route after successful login
+                        navigate('/budget');
+
+                    } else {
+                        const errorData = await response.json();
+                        setError(errorData.message || 'Invalid credentials');
+                    }
+                } catch (err) {
+                    setError('An error occurred during login');
+                }
+            }
         }
     };
 
@@ -35,14 +73,14 @@ export const Login: React.FC = () => {
                 <div className="title-login">Login</div>
                     <form onSubmit={handleSubmit} className="login-form">
                         <div className="input-group">
-                            <label htmlFor="username">Username</label>
+                            <label htmlFor="email">Email</label>
                             <input
                                 type="text"
-                                id="username"
-                                value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                id="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
                                 required
-                                placeholder="Enter your username"
+                                placeholder="Enter your email"
                             />
                         </div>
 
