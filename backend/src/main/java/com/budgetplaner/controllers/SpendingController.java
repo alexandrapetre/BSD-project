@@ -20,6 +20,14 @@ public class SpendingController {
 
     @PostMapping
     public Spending createSpending(@RequestBody Spending spending) {
+        if (spending.getAmount() <= 0) {
+            throw new IllegalArgumentException("Amount must be greater than zero");
+        }
+
+        if (spending.getCategory() == null || spending.getCategory().isEmpty()) {
+            throw new IllegalArgumentException("Category must be selected");
+        }
+
         return spendingService.saveSpending(spending);
     }
 
@@ -28,14 +36,14 @@ public class SpendingController {
         return spendingService.findSpendingsByUser(userId);
     }
 
-    @PutMapping("/{userId}")
-    public Spending updateSpending(@PathVariable int userId, @RequestBody Spending spending) {
-        return spendingService.updateSpending(userId, spending);
+    @PutMapping("/{spendingId}")
+    public Spending updateSpending(@PathVariable int spendingId, @RequestBody Spending spending) {
+        return spendingService.updateSpending(spendingId, spending);
     }
 
-    @DeleteMapping("/{userId}")
-    public void deleteSpending(@PathVariable int userId) {
-        spendingService.deleteSpending(userId);
+    @DeleteMapping("/{spendingId}")
+    public void deleteSpending(@PathVariable int spendingId) {
+        spendingService.deleteSpending(spendingId);
     }
 
 

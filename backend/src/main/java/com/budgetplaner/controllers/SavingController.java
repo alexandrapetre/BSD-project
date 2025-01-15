@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/savings")
@@ -27,9 +28,10 @@ public class SavingController {
         return savingService.findSavingsByUser(userId);
     }
 
-    @PostMapping("/contribute/{userId}")
-    public Savings contributeToSavings(@PathVariable int userId, @RequestBody Double contribution) {
-        return savingService.addContribution(userId, contribution);
+    @PostMapping("/contribute/{savingsId}")
+    public Savings contributeToSavings(@PathVariable int savingsId, @RequestBody Map<String, Object> requestBody) {
+        Double contribution = ((Number) requestBody.get("contribution")).doubleValue();
+        return savingService.addContribution(savingsId, contribution);
     }
 
 }
