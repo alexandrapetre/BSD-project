@@ -1,44 +1,85 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import "./Spending.css";
 import {Header} from "../header/Header";
 import {Footer} from "../footer/Footer";
+import {addNewSpending, getSpendings, getUser} from "../api/ApiServices";
+import {User} from "../api/budgetPlannerTypes";
 
 interface Transaction {
+    id?: number;
     date: string;
     category: string;
     amount: number;
 }
 
 export const Spending: React.FC = () => {
+    const [user, setUser] = useState<User>();
+    const [loading, setLoading] = useState(false);
     const [amount, setAmount] = useState<string>("");
     const [category, setCategory] = useState<string>("");
-    const [transactions, setTransactions] = useState<Transaction[]>([
-        { date: "2023-05-01", category: "Food", amount: 50 },
-        { date: "2023-05-02", category: "Transportation", amount: 30 },
-        { date: "2023-05-03", category: "Entertainment", amount: 100 },
-    ]);
+    const [transactions, setTransactions] = useState<Transaction[]>([]);
 
-    const handleAddTransaction = (e: React.FormEvent) => {
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const data = await getUser();
+                setUser(data);
+            } catch (err) {
+               console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUser();
+    }, []);
+
+    useEffect(() => {
+        const fetchSpendings = async () => {
+            try {
+                if(user) {
+                    const data = await getSpendings(parseInt(user.id));
+                    setTransactions(data);
+                }
+            } catch (err) {
+                console.log(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchSpendings();
+    }, [user]);
+
+    const handleAddTransaction = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (amount && category) {
+        if (amount && category && user) {
             const newTransaction: Transaction = {
                 date: new Date().toISOString().split("T")[0],
                 category,
                 amount: parseFloat(amount),
             };
             setTransactions((prev) => [...prev, newTransaction]);
+
+            try {
+                const spendingAmount = parseFloat(amount as string);
+
+                await addNewSpending(parseInt(user.id), category, spendingAmount, new Date().toISOString().split("T")[0]);
+
+            } catch (error) {
+                console.log(`Error: ${error.message}`);
+            }
+
             setAmount("");
             setCategory("");
         }
     };
 
     return (
-        <div>
+        <div className="spending-container">
             <Header/>
             <div className="spending-page">
-                <h2 className="title">Record Your Spending</h2>
+                <h2 className="title-spending">Record Your Spending</h2>
                 <form className="spending-form" onSubmit={handleAddTransaction}>
-                    <div className="form-group">
+                    <div className="form-group-spending">
                         <label htmlFor="amount">Amount Spent</label>
                         <input
                             type="number"
@@ -48,7 +89,7 @@ export const Spending: React.FC = () => {
                             onChange={(e) => setAmount(e.target.value)}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className="form-group-spending">
                         <label htmlFor="category">Category</label>
                         <select
                             id="category"
@@ -63,12 +104,12 @@ export const Spending: React.FC = () => {
                             <option value="Other">Other</option>
                         </select>
                     </div>
-                    <button type="submit" className="submit-button">
+                    <button type="submit" className="submit-button-spending">
                         Record Spending
                     </button>
                 </form>
-                <h3 className="subtitle">Recent Transactions</h3>
-                <table className="transactions-table">
+                <h3 className="subtitle-spending">Recent Transactions</h3>
+                <table className="transactions-table-spending">
                     <thead>
                     <tr>
                         <th>Date</th>

@@ -45,6 +45,7 @@ export const Login: React.FC = () => {
 
                     if (response.ok) {
                         const data = await response.json();
+                        console.log(data);
                         const token = data.token;
 
                         // Store token in localStorage
@@ -52,12 +53,14 @@ export const Login: React.FC = () => {
 
                         alert('Logged in successfully!');
                         // Redirect user to dashboard (/) or protected route after successful login
-                        navigate('/budget');
+                        navigate('/');
 
                     } else {
                         const errorData = await response.json();
                         setError(errorData.message || 'Invalid credentials');
                     }
+
+
                 } catch (err) {
                     setError('An error occurred during login');
                 }

@@ -1,28 +1,29 @@
 /* SpendingPage.css */
 
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f8f9fa;
+
+.spending-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .spending-page {
-    max-width: 800px;
-    margin: 50px auto;
     background: #ffffff;
-    padding: 20px 30px;
+    padding: 20px;
+    margin:20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    flex:1;
 }
 
-.title {
+.title-spending {
     text-align: center;
     font-size: 24px;
     color: #333;
     margin-bottom: 20px;
 }
 
-.subtitle {
+.subtitle-spending {
     font-size: 18px;
     margin-top: 20px;
     margin-bottom: 10px;
@@ -34,7 +35,7 @@ body {
     flex-direction: column;
 }
 
-.form-group {
+.form-group-spending {
     margin-bottom: 15px;
 }
 
@@ -61,7 +62,7 @@ select:focus {
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
-.submit-button {
+.submit-button-spending {
     padding: 10px;
     background-color: #333;
     color: #ffffff;
@@ -73,28 +74,28 @@ select:focus {
     margin-top: 10px;
 }
 
-.submit-button:hover {
+.submit-button-spending:hover {
     background-color: #555;
 }
 
-.transactions-table {
+.transactions-table-spending {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
 }
 
-.transactions-table th,
-.transactions-table td {
+.transactions-table-spending th,
+.transactions-table-spending td {
     text-align: left;
     padding: 10px;
     border: 1px solid #ddd;
 }
 
-.transactions-table th {
+.transactions-table-spending th {
     background-color: #f8f9fa;
     color: #555;
 }
 
-.transactions-table tbody tr:nth-child(odd) {
+.transactions-table-spending tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
 }
