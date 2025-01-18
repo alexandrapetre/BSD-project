@@ -6,6 +6,7 @@ import {Login} from "./login/Login";
 import {Register} from "./register/Register";
 import {Budget} from "./budget/Budget";
 import {Spending} from "./spending/Spending";
+import {Savings} from "./savings/Savings";
 
 
 const ScrollToTop = () => {
@@ -29,7 +30,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/budget" element={<Budget />} />
-              {/*<Route path="/savings" element={<Savings />} />*/}
+              <Route path="/savings" element={<Savings />} />
               <Route path="/spending" element={<Spending />} />
           </Routes>
       </Router>
