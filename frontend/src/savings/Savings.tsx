@@ -15,7 +15,7 @@ interface Goal {
 export const Savings: React.FC = () => {
     const [user, setUser] = useState<User | null>(null);
     const [goals, setGoals] = useState<Goal[]>([]);
-    const [contribution, setContribution] = useState<number|string>('');
+    const [contributions, setContributions] = useState<(number | string)[]>([]);
     const [newGoalName, setNewGoalName] = useState('');
     const [newGoalTarget, setNewGoalTarget] = useState<number | string>('');
 
@@ -49,6 +49,7 @@ export const Savings: React.FC = () => {
         if (newGoalName && newGoalTarget && user) {
             try {
                 await addNewSaving(parseInt(user.id), newGoalName, Number(newGoalTarget));
+                setContributions([...contributions, ""]);
                 setGoals([...goals, { goalName: newGoalName, targetAmount: Number(newGoalTarget), savedAmount: 0 }]);
                 setNewGoalName('');
                 setNewGoalTarget('');
@@ -59,16 +60,25 @@ export const Savings: React.FC = () => {
         }
     };
 
-    const handleContribute = async (index: number, amount: number) => {
+    const handleContribute = async (index: number, amount: string) => {
+        if (parseInt(amount) <= 0) return;
         const updatedGoals = [...goals];
-        updatedGoals[index].savedAmount += amount;
+        updatedGoals[index].savedAmount += parseInt(amount);
         try {
-            await contributeToSaving(updatedGoals[index].id || index, amount);
-        }
-        catch (err) {
+            await contributeToSaving(updatedGoals[index].id || index, parseInt(amount));
+            setGoals(updatedGoals);
+            const updatedContributions = [...contributions];
+            updatedContributions[index] = ""; // Clear the input field for this goal
+            setContributions(updatedContributions);
+        } catch (err) {
             console.log(err);
         }
-        setContribution('');
+    };
+
+    const handleContributionChange = (index: number, value: string) => {
+        const updatedContributions = [...contributions];
+        updatedContributions[index] = value; // Update only the specific goal's contribution
+        setContributions(updatedContributions);
     };
 
     // const handleDeleteSaving = async(savingsId: number) => {
@@ -118,16 +128,17 @@ export const Savings: React.FC = () => {
                         <p>
                             ${goal.savedAmount.toFixed(2)} / ${goal.targetAmount.toFixed(2)}
                         </p>
-                        <div className="contribute">
+                        <div className="contribute" key={index}>
                             <input
                                 type="number"
+                                key={index}
                                 placeholder="Contribute amount"
-                                value={contribution}
+                                value={contributions[index]}
                                 onChange={(e) =>
-                                    setContribution(Number(e.target.value) || 0)
+                                    handleContributionChange(index, e.target.value)
                                 }
                             />
-                            <button onClick={() => handleContribute(index, contribution as number)}>Contribute</button>
+                            <button onClick={() => handleContribute(index, contributions[index] as string)}>Contribute</button>
                         </div>
                     </div>
                 ))}
