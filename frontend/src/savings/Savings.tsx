@@ -62,59 +62,78 @@ export const Savings: React.FC = () => {
     const handleContribute = async (index: number, amount: number) => {
         const updatedGoals = [...goals];
         updatedGoals[index].savedAmount += amount;
-        await contributeToSaving(updatedGoals[index].id || index, amount);
+        try {
+            await contributeToSaving(updatedGoals[index].id || index, amount);
+        }
+        catch (err) {
+            console.log(err);
+        }
         setContribution('');
     };
+
+    // const handleDeleteSaving = async(savingsId: number) => {
+    //     try {
+    //         await deleteSaving(savingsId);
+    //     }
+    //     catch (err) {
+    //         console.log(err);
+    //     }
+    // }
 
     return (
         <div className="savings-container">
         <Header/>
-        <div className="savings-goals">
-            <h1>Add New Savings Goal</h1>
-            <div className="add-goal">
-                <input
-                    type="text"
-                    placeholder="Enter goal name"
-                    value={newGoalName}
-                    onChange={(e) => setNewGoalName(e.target.value)}
-                />
-                <input
-                    type="number"
-                    placeholder="Enter target amount"
-                    value={newGoalTarget}
-                    onChange={(e) => setNewGoalTarget(e.target.value)}
-                />
-                <button onClick={handleAddGoal}>+ Add Goal</button>
-            </div>
-
-            {goals.map((goal, index) => (
-                <div key={index} className="goal">
-                    <h2>{goal.goalName}</h2>
-                    <div className="progress-bar">
-                        <div
-                            className="progress"
-                            style={{ width: `${(goal.savedAmount / goal.targetAmount) * 100}%` }}
-                        ></div>
-                    </div>
-                    <p>
-                        ${goal.savedAmount.toFixed(2)} / ${goal.targetAmount.toFixed(2)}
-                    </p>
-                    <div className="contribute">
-                        <input
-                            type="number"
-                            placeholder="Contribute amount"
-                            value={contribution}
-                            onChange={(e) =>
-                                setContribution(Number(e.target.value) || 0)
-                            }
-                        />
-                        <button onClick={() => handleContribute(index, contribution as number)}>Contribute</button>
-                    </div>
+            <div className="savings-goals">
+                <h1>Add New Savings Goal</h1>
+                <div className="add-goal">
+                    <input
+                        type="text"
+                        placeholder="Enter goal name"
+                        value={newGoalName}
+                        onChange={(e) => setNewGoalName(e.target.value)}
+                    />
+                    <input
+                        type="number"
+                        placeholder="Enter target amount"
+                        value={newGoalTarget}
+                        onChange={(e) => setNewGoalTarget(e.target.value)}
+                    />
+                    <button onClick={handleAddGoal}>+ Add Goal</button>
                 </div>
-            ))}
 
+                {goals.map((goal, index) => (
+                    <div key={index} className="goal">
+                        <div className="savings-header">
+                            <h2>{goal.goalName}</h2>
+                            {/*<button className="delete-button-saving"*/}
+                            {/*        onClick={() => handleDeleteSaving(goal.id || index)}>X</button>*/}
+                        </div>
+
+                        <div className="progress-bar">
+                            <div
+                                className="progress"
+                                style={{width: `${(goal.savedAmount / goal.targetAmount) * 100}%`}}
+                            ></div>
+                        </div>
+                        <p>
+                            ${goal.savedAmount.toFixed(2)} / ${goal.targetAmount.toFixed(2)}
+                        </p>
+                        <div className="contribute">
+                            <input
+                                type="number"
+                                placeholder="Contribute amount"
+                                value={contribution}
+                                onChange={(e) =>
+                                    setContribution(Number(e.target.value) || 0)
+                                }
+                            />
+                            <button onClick={() => handleContribute(index, contribution as number)}>Contribute</button>
+                        </div>
+                    </div>
+                ))}
+
+            </div>
+            <Footer/>
         </div>
-    <Footer/>
-    </div>
     );
 };

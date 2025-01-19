@@ -4,6 +4,12 @@
     min-height: 100vh;
 }
 
+.savings-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
 .savings-goals {
     font-family: Arial, sans-serif;
     max-width: 800px;
@@ -101,4 +107,19 @@ h1 {
 
 .contribute button:hover {
     background-color: #333;
+}
+
+.delete-button-saving {
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    height: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.delete-button-saving:hover {
+    background-color: #4d4c4c;
+    color: white;
 }

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import "./Spending.css";
 import {Header} from "../header/Header";
 import {Footer} from "../footer/Footer";
-import {addNewSpending, getSpendings, getUser} from "../api/ApiServices";
+import {addNewSpending, deleteSpending, getSpendings, getUser} from "../api/ApiServices";
 import {User} from "../api/budgetPlannerTypes";
 
 interface Transaction {
@@ -73,6 +73,17 @@ export const Spending: React.FC = () => {
         }
     };
 
+    const handleDeleteTransaction = async(transactionId : number) => {
+        setTransactions(
+            transactions.filter((transaction) => transaction.id !== transactionId)
+        );
+        try {
+            await deleteSpending(transactionId);
+        } catch (error) {
+            console.log(`Error: ${error.message}`);
+        }
+    }
+
     return (
         <div className="spending-container">
             <Header/>
@@ -115,6 +126,7 @@ export const Spending: React.FC = () => {
                         <th>Date</th>
                         <th>Category</th>
                         <th>Amount</th>
+                        <th>Delete button</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -123,6 +135,14 @@ export const Spending: React.FC = () => {
                             <td>{transaction.date}</td>
                             <td>{transaction.category}</td>
                             <td>${transaction.amount.toFixed(2)}</td>
+                            <td>
+                                <button
+                                    className="delete-button"
+                                    onClick={() => handleDeleteTransaction(transaction?.id || index)}
+                                >
+                                    Delete
+                                </button>
+                            </td>
                         </tr>
                     ))}
                     </tbody>

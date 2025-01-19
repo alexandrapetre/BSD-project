@@ -1,5 +1,5 @@
 import React from 'react';
-import './FinancialOverview.css';
+import './Dashboard.css';
 
 export const Dashboard: React.FC = () => {
     return (
