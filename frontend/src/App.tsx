@@ -7,6 +7,7 @@ import {Register} from "./register/Register";
 import {Budget} from "./budget/Budget";
 import {Spending} from "./spending/Spending";
 import {Savings} from "./savings/Savings";
+import {Dashboard} from "./dashboard/Dashboard";
 
 
 const ScrollToTop = () => {

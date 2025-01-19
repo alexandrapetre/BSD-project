@@ -63,6 +63,7 @@ select:focus {
 }
 
 .submit-button-spending {
+    width: 300px;
     padding: 10px;
     background-color: #333;
     color: #ffffff;
@@ -98,4 +99,19 @@ select:focus {
 
 .transactions-table-spending tbody tr:nth-child(odd) {
     background-color: #f9f9f9;
+}
+
+.delete-button {
+    background-color: #1a1a1a;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.delete-button:hover {
+    background-color: #4d4c4c;
+    color: white;
 }
